@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="theme-color" content="#f4f6f2">
+	<title>Student Expense Tracker</title>
+	<link rel="stylesheet" href="style.css">
+	<script src="script.js" defer></script>
+</head>
+<body>
+	<header class="site-header">
+		<a class="brand" href="#main-content" aria-label="Student Expense Tracker home">
+			<span class="brand-mark" aria-hidden="true">SE</span>
+			<span>Student Expense Tracker</span>
+		</a>
+	</header>
+
+	<main id="main-content" class="dashboard">
+		<section class="page-heading" aria-labelledby="page-title">
+			<div>
+				<p class="eyebrow">YOUR MONEY, IN VIEW</p>
+				<h1 id="page-title">Expense overview</h1>
+				<p class="page-description">Set a monthly budget and keep track of where it goes.</p>
+			</div>
+			<form class="budget-form" id="budget-form">
+				<label for="monthly-budget">Monthly budget</label>
+				<div class="input-with-prefix">
+					<span aria-hidden="true">₹</span>
+					<input id="monthly-budget" name="budget" type="number" min="0" step="0.01" placeholder="0.00" inputmode="decimal" required>
+				</div>
+				<button type="submit">Set budget</button>
+			</form>
+		</section>
+
+		<section class="summary-grid" aria-label="Budget summary">
+			<article class="summary-card">
+				<h2>Monthly budget</h2>
+				<p class="summary-value" id="budget-total" aria-live="polite">₹0.00</p>
+				<p class="summary-note">Your spending limit</p>
+			</article>
+			<article class="summary-card">
+				<h2>Total spent</h2>
+				<p class="summary-value" id="total-spent" aria-live="polite">₹0.00</p>
+				<p class="summary-note">Across all expenses</p>
+			</article>
+			<article class="summary-card summary-card-remaining">
+				<h2>Remaining</h2>
+				<p class="summary-value" id="remaining-budget" aria-live="polite">₹0.00</p>
+				<p class="summary-note">Available this month</p>
+			</article>
+		</section>
+
+		<section class="expense-entry" aria-labelledby="expense-form-title">
+			<div class="section-heading">
+				<div>
+					<p class="eyebrow">ADD TO YOUR TRACKER</p>
+					<h2 id="expense-form-title">Record an expense</h2>
+				</div>
+			</div>
+			<form id="expense-form" class="expense-form">
+				<div class="form-field">
+					<label for="expense-description">Description</label>
+					<input id="expense-description" name="description" type="text" placeholder="e.g. Textbooks" autocomplete="off" required>
+				</div>
+				<div class="form-field">
+					<label for="expense-category">Category</label>
+					<select id="expense-category" name="category" required>
+						<option value="" disabled selected>Select a category</option>
+						<option value="Food">Food</option>
+						<option value="Transport">Transport</option>
+						<option value="Study">Study</option>
+						<option value="Housing">Housing</option>
+						<option value="Personal">Personal</option>
+						<option value="Other">Other</option>
+					</select>
+				</div>
+				<div class="form-field">
+					<label for="expense-date">Date</label>
+					<input id="expense-date" name="date" type="date" required>
+				</div>
+				<div class="form-field">
+					<label for="expense-amount">Amount (₹)</label>
+					<input id="expense-amount" name="amount" type="number" min="0.01" step="0.01" placeholder="0.00" inputmode="decimal" required>
+				</div>
+				<button class="add-expense-button" type="submit">Add expense</button>
+			</form>
+		</section>
+
+		<section class="expense-history" aria-labelledby="history-title">
+			<div class="section-heading history-heading">
+				<div>
+					<p class="eyebrow">YOUR RECENT ACTIVITY</p>
+					<h2 id="history-title">Expense history</h2>
+				</div>
+				<label class="filter-field" for="category-filter">
+					<span>Filter by category</span>
+					<select id="category-filter" name="category-filter">
+						<option value="all">All categories</option>
+						<option value="Food">Food</option>
+						<option value="Transport">Transport</option>
+						<option value="Study">Study</option>
+						<option value="Housing">Housing</option>
+						<option value="Personal">Personal</option>
+						<option value="Other">Other</option>
+					</select>
+				</label>
+			</div>
+			<div class="table-wrapper">
+				<table>
+					<caption class="visually-hidden">Recorded expenses with date, description, category, and amount</caption>
+					<thead>
+						<tr>
+							<th scope="col">Date</th>
+							<th scope="col">Description</th>
+							<th scope="col">Category</th>
+							<th scope="col">Amount</th>
+							<th scope="col">Actions</th>
+						</tr>
+					</thead>
+					<tbody id="expense-list">
+						<tr class="empty-state">
+							<td colspan="5">No expenses yet. Add one above to get started.</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<p id="tracker-status" class="visually-hidden" role="status" aria-live="polite"></p>
+		</section>
+	</main>
+</body>
+</html>
