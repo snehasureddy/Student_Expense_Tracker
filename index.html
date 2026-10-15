@@ -51,6 +51,16 @@
 			</article>
 		</section>
 
+		<p id="budget-alert" class="budget-alert" role="status" aria-live="polite" hidden></p>
+
+		<section class="category-summary" aria-labelledby="category-summary-title">
+			<div class="section-heading">
+				<p class="eyebrow">SPENDING BREAKDOWN</p>
+				<h2 id="category-summary-title">Category-wise spending</h2>
+			</div>
+			<div id="category-totals" class="category-total-grid" aria-live="polite"></div>
+		</section>
+
 		<section class="expense-entry" aria-labelledby="expense-form-title">
 			<div class="section-heading">
 				<div>
@@ -68,6 +78,9 @@
 					<select id="expense-category" name="category" required>
 						<option value="" disabled selected>Select a category</option>
 						<option value="Food">Food</option>
+						<option value="Travel">Travel</option>
+						<option value="Books">Books</option>
+						<option value="Stationery">Stationery</option>
 						<option value="Transport">Transport</option>
 						<option value="Study">Study</option>
 						<option value="Housing">Housing</option>
@@ -93,18 +106,27 @@
 					<p class="eyebrow">YOUR RECENT ACTIVITY</p>
 					<h2 id="history-title">Expense history</h2>
 				</div>
-				<label class="filter-field" for="category-filter">
-					<span>Filter by category</span>
-					<select id="category-filter" name="category-filter">
+				<div class="history-filters">
+					<label class="filter-field" for="expense-search">
+						<span>Search description</span>
+						<input id="expense-search" name="expense-search" type="search" placeholder="Type to search" autocomplete="off">
+					</label>
+					<label class="filter-field" for="category-filter">
+						<span>Filter by category</span>
+						<select id="category-filter" name="category-filter">
 						<option value="all">All categories</option>
 						<option value="Food">Food</option>
+						<option value="Travel">Travel</option>
+						<option value="Books">Books</option>
+						<option value="Stationery">Stationery</option>
 						<option value="Transport">Transport</option>
 						<option value="Study">Study</option>
 						<option value="Housing">Housing</option>
 						<option value="Personal">Personal</option>
 						<option value="Other">Other</option>
-					</select>
-				</label>
+						</select>
+					</label>
+				</div>
 			</div>
 			<div class="table-wrapper">
 				<table>

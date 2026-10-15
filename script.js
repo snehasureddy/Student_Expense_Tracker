@@ -13,8 +13,11 @@ const descriptionInput = document.querySelector("#expense-description");
 const categoryInput = document.querySelector("#expense-category");
 const dateInput = document.querySelector("#expense-date");
 const amountInput = document.querySelector("#expense-amount");
+const expenseSearch = document.querySelector("#expense-search");
 const categoryFilter = document.querySelector("#category-filter");
 const expenseList = document.querySelector("#expense-list");
+const categoryTotals = document.querySelector("#category-totals");
+const budgetAlert = document.querySelector("#budget-alert");
 const budgetTotal = document.querySelector("#budget-total");
 const totalSpent = document.querySelector("#total-spent");
 const remainingBudget = document.querySelector("#remaining-budget");
@@ -81,6 +84,10 @@ function renderSummary() {
 	totalSpent.textContent = formatCurrency(spent);
 	remainingBudget.textContent = formatCurrency(remaining);
 	remainingCard.classList.toggle("is-over-budget", remaining < 0);
+	budgetAlert.hidden = remaining >= 0;
+	budgetAlert.textContent = remaining < 0
+		? `Budget exceeded by ${formatCurrency(Math.abs(remaining))}. Review your spending.`
+		: "";
 	budgetInput.value = budget ? String(budget) : "";
 }
 
@@ -93,17 +100,23 @@ function makeCell(text, className = "") {
 
 function renderExpenses() {
 	const selectedCategory = categoryFilter.value;
+	const searchTerm = expenseSearch.value.trim().toLocaleLowerCase();
 	const visibleExpenses = expenses
 		.filter((expense) => selectedCategory === "all" || expense.category === selectedCategory)
+		.filter((expense) => expense.description.toLocaleLowerCase().includes(searchTerm))
 		.sort((first, second) => second.date.localeCompare(first.date) || second.id.localeCompare(first.id));
 	const rows = document.createDocumentFragment();
 
 	if (visibleExpenses.length === 0) {
 		const row = document.createElement("tr");
 		row.className = "empty-state";
-		const message = selectedCategory === "all"
+		const message = expenses.length === 0
 			? "No expenses yet. Add one above to get started."
-			: `No ${selectedCategory.toLowerCase()} expenses found.`;
+			: searchTerm && selectedCategory !== "all"
+				? "No expenses match these filters."
+				: searchTerm
+					? "No expenses match your search."
+					: `No ${selectedCategory.toLowerCase()} expenses found.`;
 		const cell = makeCell(message);
 		cell.colSpan = 5;
 		row.append(cell);
@@ -135,8 +148,29 @@ function renderExpenses() {
 	expenseList.replaceChildren(rows);
 }
 
+function renderCategoryTotals() {
+	const rows = document.createDocumentFragment();
+
+	for (const category of validCategories) {
+		const total = expenses
+			.filter((expense) => expense.category === category)
+			.reduce((sum, expense) => sum + expense.amount, 0);
+		const item = document.createElement("article");
+		item.className = "category-total";
+		const label = document.createElement("h3");
+		label.textContent = category;
+		const amount = document.createElement("p");
+		amount.textContent = formatCurrency(total);
+		item.append(label, amount);
+		rows.append(item);
+	}
+
+	categoryTotals.replaceChildren(rows);
+}
+
 function render() {
 	renderSummary();
+	renderCategoryTotals();
 	renderExpenses();
 }
 
@@ -230,6 +264,7 @@ function getLocalDate() {
 }
 
 categoryFilter.addEventListener("change", renderExpenses);
+expenseSearch.addEventListener("input", renderExpenses);
 descriptionInput.addEventListener("input", () => descriptionInput.setCustomValidity(""));
 categoryInput.addEventListener("change", () => categoryInput.setCustomValidity(""));
 amountInput.addEventListener("input", () => amountInput.setCustomValidity(""));
